@@ -2,13 +2,7 @@
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include <math.h>
-//#include "ship.h"
 #include "graphics.h"
-
-/*
-const int sizeX = 8;
-const int sizeY = 20;*/
-char windowTitle[20];
 
 static gboolean fieldClick(GtkWidget *window, GdkEventButton *event, field_t *field);
 static gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field);
@@ -28,13 +22,9 @@ int main(int argc, char **argv)
     field = fieldInit();
     gtk_init(&argc, &argv);
 
-    /* need to rewrite using threads */
-    //g_timeout_add(2000, (GSourceFunc) generateEnemies, field);
-
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    //gtk_window_resize(GTK_WINDOW(window), 485, 510);  /*need to fix*/
     gtk_window_set_title(GTK_WINDOW(window), "Epic Spaceride");
 
     frame = gtk_fixed_new();
@@ -73,11 +63,8 @@ static gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field)
         if (!field->isGameover) {
             pthread_create(&bulletThread, NULL, bulletStart, (void *) field);
         }
-        //pthread_cancel(outputThread);
-        //g_timeout_add(100, (GSourceFunc) bulletStart, field);
         break;
     }
-    //gtk_widget_queue_draw(window);
     return TRUE;
 }
 
