@@ -49,7 +49,9 @@ static void *generateBlocks(void *vptr_args)
     for (modifierTime = 0; modifierTime < timeConst && !field->isGameover; modifierTime += 10000) {  //need to more powerful time algorithm
         /* finding the line without the blocks */
         for (i = 0; i < field->sizeX; i++) {
-            if (field->values[field->sizeY - 2][i] == BLOCK_LVL1) {
+            if ((field->values[field->sizeY - 2][i] == BLOCK_LVL1) ||
+                (field->values[field->sizeY - 2][i] == BLOCK_LVL2) ||
+                (field->values[field->sizeY - 2][i] == BLOCK_LVL3)) {
                 field->isGameover = 1;
                 return NULL;
             }
