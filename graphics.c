@@ -54,8 +54,20 @@ void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
                 //cairo_fill(cairoDrawPlace);
                 cairo_stroke(cairoDrawPlace);
                 break;
-            case BLOCK:
+            case BLOCK_LVL1:
                 cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
+                cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
+                cairo_fill(cairoDrawPlace);
+                cairo_stroke(cairoDrawPlace);
+                break;
+            case BLOCK_LVL2:
+                cairo_set_source_rgba(cairoDrawPlace, (float) 127 / (float) 255 , (float) 127 / (float) 255, (float) 127 / (float) 255, 1);
+                cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
+                cairo_fill(cairoDrawPlace);
+                cairo_stroke(cairoDrawPlace);
+                break;
+            case BLOCK_LVL3:
+                cairo_set_source_rgba(cairoDrawPlace, (float) 64 / (float) 255 , (float) 64 / (float) 255, (float) 64 / (float) 255, 1);
                 cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
                 cairo_fill(cairoDrawPlace);
                 cairo_stroke(cairoDrawPlace);

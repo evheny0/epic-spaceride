@@ -5,7 +5,9 @@ enum field_values {
     EMPTY,
     SHIP,
     BULLET,
-    BLOCK,
+    BLOCK_LVL1,
+    BLOCK_LVL2,
+    BLOCK_LVL3
 };
 
 typedef struct coord_t {

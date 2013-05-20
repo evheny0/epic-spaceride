@@ -20,16 +20,16 @@ void shipMove(field_t *field, int y, int x)
     field->shipLocation.y += y;
     (field->shipLocation.y == field->sizeY || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
 
-    if ((field->values[field->shipLocation.y][field->shipLocation.x - 1] == BLOCK) ||
-        (field->values[field->shipLocation.y][field->shipLocation.x + 1] == BLOCK) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x] == BLOCK) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] == BLOCK) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] == BLOCK) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] == BLOCK) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] == BLOCK) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x] == BLOCK) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] == BLOCK) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] == BLOCK) ||
+    if ((field->values[field->shipLocation.y][field->shipLocation.x - 1] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y][field->shipLocation.x + 1] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 1][field->shipLocation.x] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 2][field->shipLocation.x] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] == BLOCK_LVL1) ||
+        (field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] == BLOCK_LVL1) ||
         (field->values[field->shipLocation.y - 3][field->shipLocation.x])) {
         field->isGameover = 1;
     }
@@ -53,10 +53,21 @@ int bulletMove(field_t *field, int y, int x)
         field->score += -1;
         return -1;
     }
-    if (field->values[y][x] == BLOCK) {
+    switch (field->values[y][x]) {
+    case BLOCK_LVL1:
         field->values[y + 1][x] = EMPTY;
         field->values[y][x] = EMPTY;
+        field->score += 2;
+        return 1;
+    case BLOCK_LVL2:
+        field->values[y + 1][x] = EMPTY;
+        field->values[y][x] = BLOCK_LVL1;
         field->score += 3;
+        return 1;
+    case BLOCK_LVL3:
+        field->values[y + 1][x] = EMPTY;
+        field->values[y][x] = BLOCK_LVL2;
+        field->score += 4;
         return 1;
     }
     field->values[y][x] = BULLET;
