@@ -9,35 +9,19 @@ field_t *fieldInit()
     field_t *field;
     field = (field_t *) calloc(1, sizeof(field_t));
     field->sizeX = 20;
-    field->sizeY = 30;
+    field->sizeY = 40;
 
     field->values = (int **) calloc(field->sizeY, sizeof(int *));
     for (i = 0; i < field->sizeY; i++) {
         field->values[i] = (int *) calloc(field->sizeX, sizeof(int));
     }
 
-
-    field->shipLocation.x = field->sizeX / 2 ;
-    field->shipLocation.y = field->sizeY - 1;
-    /* need to "shipMove" func */
-    field->values[field->shipLocation.y][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 3][field->shipLocation.x] = SHIP;
-
     pthread_create(&blocksThread, NULL, generateBlocks, (void *) field);
 
     return field;
 }
     
-static void *generateBlocks(void *vptr_args)
+void *generateBlocks(void *vptr_args)
 {
     field_t *field;
     field = vptr_args;

@@ -12,7 +12,7 @@ void graphicsInit(GtkWidget *frame, field_t *field)
     g_timeout_add(10, (GSourceFunc) screenUpdate, darea);  //condition required to complete 
 }
 
-static gboolean on_draw_event(GtkWidget *darea, cairo_t *cairoDrawPlace, field_t *field)
+gboolean on_draw_event(GtkWidget *darea, cairo_t *cairoDrawPlace, field_t *field)
 {
     cairoDrawPlace = gdk_cairo_create(gtk_widget_get_window(darea));
     do_drawing(cairoDrawPlace, darea, field);
@@ -36,7 +36,7 @@ void do_drawing(cairo_t *cairoDrawPlace, GtkWidget *darea, field_t *field)
     cairo_stroke(cairoDrawPlace);
 }
 
-static gboolean screenUpdate(GtkWidget *darea)
+gboolean screenUpdate(GtkWidget *darea)
 {
     gtk_widget_queue_draw(darea);
     return TRUE;
@@ -61,13 +61,13 @@ void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
                 cairo_stroke(cairoDrawPlace);
                 break;
             case BLOCK_LVL2:
-                cairo_set_source_rgba(cairoDrawPlace, (float) 127 / (float) 255 , (float) 127 / (float) 255, (float) 127 / (float) 255, 1);
+                cairo_set_source_rgba(cairoDrawPlace, 0.5 , 0.5, 0.5, 1);  //127
                 cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
                 cairo_fill(cairoDrawPlace);
                 cairo_stroke(cairoDrawPlace);
                 break;
             case BLOCK_LVL3:
-                cairo_set_source_rgba(cairoDrawPlace, (float) 64 / (float) 255 , (float) 64 / (float) 255, (float) 64 / (float) 255, 1);
+                cairo_set_source_rgba(cairoDrawPlace, 0.25, 0.25, 0.25, 1);  //64
                 cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
                 cairo_fill(cairoDrawPlace);
                 cairo_stroke(cairoDrawPlace);
@@ -100,17 +100,17 @@ void menuDraw(cairo_t *cairoDrawPlace, field_t *field)
     cairo_move_to(cairoDrawPlace, pixelConst * field->sizeX + 5, 0);
     cairo_line_to(cairoDrawPlace, pixelConst * field->sizeX + 5, pixelConst * field->sizeY);
     cairo_translate(cairoDrawPlace, pixelConst * field->sizeX + 10, 5);
-    cairo_set_font_size(cairoDrawPlace, pixelConst);
-    cairo_move_to(cairoDrawPlace, pixelConst, pixelConst);
+    cairo_set_font_size(cairoDrawPlace, 16);
+    cairo_move_to(cairoDrawPlace, pixelConst, 16);
     cairo_show_text(cairoDrawPlace, "Score:"); 
-    cairo_move_to(cairoDrawPlace, pixelConst, pixelConst * 2);
+    cairo_move_to(cairoDrawPlace, pixelConst, 32);
     cairo_show_text(cairoDrawPlace, score); 
 }
 
 void gameoverDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
-    cairo_set_font_size(cairoDrawPlace, pixelConst);
+    cairo_set_font_size(cairoDrawPlace, 16);
     cairo_move_to(cairoDrawPlace, ((field->sizeX / 2 - 3)) * pixelConst, (field->sizeY / 2) * pixelConst);
     cairo_show_text(cairoDrawPlace, "GAME OVER");  
 }

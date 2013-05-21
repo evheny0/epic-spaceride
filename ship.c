@@ -1,5 +1,12 @@
 #include "ship.h"
 
+void shipInit(field_t *field) 
+{
+    field->shipLocation.x = field->sizeX / 2 ;
+    field->shipLocation.y = field->sizeY - 1;
+    shipMove(field, 0, 0);
+}
+
 void shipMove(field_t *field, int y, int x)
 {
     field->values[field->shipLocation.y][field->shipLocation.x - 1] = EMPTY;
@@ -16,9 +23,9 @@ void shipMove(field_t *field, int y, int x)
 
 
     field->shipLocation.x += x;
-    ((field->shipLocation.x) == field->sizeX || (field->shipLocation.x) < 0) ? field->shipLocation.x -= x : x;
+    ((field->shipLocation.x) >= field->sizeX || (field->shipLocation.x) < 0) ? field->shipLocation.x -= x : x;
     field->shipLocation.y += y;
-    (field->shipLocation.y == field->sizeY || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
+    (field->shipLocation.y >= field->sizeY || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
 
     if ((field->values[field->shipLocation.y][field->shipLocation.x - 1] == BLOCK_LVL1) ||
         (field->values[field->shipLocation.y][field->shipLocation.x + 1] == BLOCK_LVL1) ||

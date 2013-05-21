@@ -24,5 +24,6 @@ typedef struct field_t {
     int isGameover;
 } field_t;
 
+
 field_t *fieldInit();
-static void *generateBlocks(void *vptr_args);
+void *generateBlocks(void *vptr_args);
