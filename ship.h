@@ -10,8 +10,9 @@ enum SHIPS {
     SKULL
 };
 
-
+void shipInit(field_t *field) ;
 void shipMove(field_t *field, int y, int x);
+void removeShip(field_t *field, int y, int x);
 void shipSetArcane(field_t *field, int y, int x, int state);
 void shipSetWing(field_t *field, int y, int x, int state);
 void shipSetVertigo(field_t *field, int y, int x, int state);

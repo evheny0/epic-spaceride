@@ -27,6 +27,16 @@ void *generateBlocks(void *vptr_args)
 {
     field_t *field;
     field = vptr_args;
+    int direction = 1;
+    while (field->gameStatus == START_MENU) {
+        if ((field->shipLocation.x + 3) == field->size.x || (field->shipLocation.x - 3) < 0) {
+            direction = -direction;
+        }
+        shipMove(field, 0, direction);
+        usleep(100000);
+    }
+    removeShip(field, field->shipLocation.y, field->shipLocation.x);
+    shipInit(field);
 
     int i, j;
     int modifierTime;
@@ -102,6 +112,6 @@ void *generateBlocks(void *vptr_args)
         }
         usleep(timeConst - modifierTime);
     }
-    field->gameStatus = WIN;
+    //field->gameStatus = WIN;
     return NULL;
 }

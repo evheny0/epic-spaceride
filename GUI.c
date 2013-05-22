@@ -32,7 +32,6 @@ gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field)
     switch (field->gameStatus) {
     case START_MENU:
         startMenuKeys(event->keyval, field);
-        gameKeys(event->keyval, field);
         break;
     case GAME_IN_PROCESS:
         gameKeys(event->keyval, field);
@@ -47,10 +46,21 @@ void startMenuKeys(int keyval, field_t *field)
 {
     switch (keyval) {
     case GDK_KEY_Up:
-        //shipMove(field, -1, 0);
+        if (field->shipType - 1 < ARCANE) {
+            field->shipType = SKULL;
+        } else {
+            (field->shipType)--;
+        }
         break;
     case GDK_KEY_Down:
-        //shipMove(field, 1, 0);
+        if (field->shipType + 1 > SKULL) {
+            field->shipType = ARCANE;
+        } else {
+            (field->shipType)++;
+        }
+        break;
+    case GDK_KEY_z:
+        field->gameStatus = GAME_IN_PROCESS;
         break;
     }
 }
@@ -72,9 +82,9 @@ void gameKeys(int keyval, field_t *field)
         shipMove(field, 0, 1);
         break;
     case GDK_KEY_z:
-        //if (field->gameStatus == GAME_IN_PROCESS) {
+        if (field->gameStatus == GAME_IN_PROCESS) {
             pthread_create(&bulletThread, NULL, bulletStart, (void *) field);
-        //}
+        }
         break;
     }
 }

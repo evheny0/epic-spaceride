@@ -7,33 +7,23 @@ void shipInit(field_t *field)
     shipMove(field, 0, 0);
 }
 
+void removeShip(field_t *field, int y, int x)
+{
+    int i, j;
+    for (i = (y - 4); i <= y; i++) {
+        for (j = (x - 2); j <= (x + 2); j++) {
+            if (field->values[i][j] == SHIP) {
+                field->values[i][j] = EMPTY;
+            }
+        }
+    }
+}
+
 void shipMove(field_t *field, int y, int x)
 {
-    switch (field->shipType) {
-    case ARCANE: 
-        shipSetArcane(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case WING: 
-        shipSetWing(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case VERTIGO: 
-        shipSetVertigo(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case YOMEN: 
-        shipSetYomen(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case OMEGA: 
-        shipSetOmega(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case HERO: 
-        shipSetHero(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    case SKULL: 
-        shipSetSkull(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
-        break;
-    }
+    removeShip(field, field->shipLocation.y, field->shipLocation.x);
     field->shipLocation.x += x;
-    ((field->shipLocation.x) >= field->size.x || (field->shipLocation.x) < 0) ? field->shipLocation.x -= x : x;
+    (field->shipLocation.x >= field->size.x || field->shipLocation.x < 0) ? field->shipLocation.x -= x : x;
     field->shipLocation.y += y;
     (field->shipLocation.y >= field->size.y || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
 
