@@ -8,13 +8,15 @@ field_t *fieldInit()
 
     field_t *field;
     field = (field_t *) calloc(1, sizeof(field_t));
-    field->sizeX = 20;
-    field->sizeY = 40;
+    field->size.x = 20;
+    field->size.y = 40;
 
-    field->values = (int **) calloc(field->sizeY, sizeof(int *));
-    for (i = 0; i < field->sizeY; i++) {
-        field->values[i] = (int *) calloc(field->sizeX, sizeof(int));
+    field->values = (int **) calloc(field->size.y, sizeof(int *));
+    for (i = 0; i < field->size.y; i++) {
+        field->values[i] = (int *) calloc(field->size.x, sizeof(int));
     }
+
+    field->gameStatus = START_MENU;
 
     pthread_create(&blocksThread, NULL, generateBlocks, (void *) field);
 
@@ -29,26 +31,25 @@ void *generateBlocks(void *vptr_args)
     int i, j;
     int modifierTime;
     const int timeConst = 2000000;
-
-    for (modifierTime = 0; modifierTime < timeConst && !field->isGameover; modifierTime += 10000) {  //need to more powerful time algorithm
-        /* finding the line without the blocks */
-        for (i = 0; i < field->sizeX; i++) {
-            if ((field->values[field->sizeY - 2][i] == BLOCK_LVL1) ||
-                (field->values[field->sizeY - 2][i] == BLOCK_LVL2) ||
-                (field->values[field->sizeY - 2][i] == BLOCK_LVL3)) {
-                field->isGameover = 1;
+    for (modifierTime = 0; (modifierTime < timeConst) && (field->gameStatus != GAMEOVER); modifierTime += 10000) {  //need to more powerful time algorithm
+        /* checking last line for blocks */
+        for (i = 0; i < field->size.x; i++) {
+            if ((field->values[field->size.y - 2][i] == BLOCK_LVL1) ||
+                (field->values[field->size.y - 2][i] == BLOCK_LVL2) ||
+                (field->values[field->size.y - 2][i] == BLOCK_LVL3)) {
+                field->gameStatus = GAMEOVER;
                 return NULL;
             }
         }
         /* moving blocks */
-        for (i = field->sizeY - 2; i > 0; i--) {
-            for (j = 0; j < field->sizeX; j++) {
+        for (i = field->size.y - 2; i > 0; i--) {
+            for (j = 0; j < field->size.x; j++) {
                 switch (field->values[i][j]) {
                 case SHIP:
                     if (field->values[i - 1][j] == BLOCK_LVL1 ||
                         field->values[i - 1][j] == BLOCK_LVL2 ||
                         field->values[i - 1][j] == BLOCK_LVL3) {
-                        field->isGameover = 1;
+                        field->gameStatus = GAMEOVER;
                         return NULL;
                     }
                     break;
@@ -81,9 +82,9 @@ void *generateBlocks(void *vptr_args)
             }
         }
         /* generation the new line of blocks */
-        for (i = 0; i < field->sizeX; i++) {
+        for (i = 0; i < field->size.x; i++) {
             if (field->values[0][i] == SHIP) {
-                field->isGameover = 1;
+                field->gameStatus = GAMEOVER;
             }
             if (rand() % 2) {
                 if (!(rand() % 5)) {
@@ -101,6 +102,6 @@ void *generateBlocks(void *vptr_args)
         }
         usleep(timeConst - modifierTime);
     }
-    field->isGameover = 2;
+    field->gameStatus = WIN;
     return NULL;
 }

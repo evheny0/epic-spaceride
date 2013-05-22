@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <math.h>
 #include "GUI.h"
 
 int main(int argc, char **argv)

@@ -7,9 +7,15 @@ void graphicsInit(GtkWidget *frame, field_t *field)
     GtkWidget *darea;
     darea = gtk_drawing_area_new();
     gtk_fixed_put(GTK_FIXED(frame), darea, 0, 0);
-    gtk_widget_set_size_request(darea, field->sizeX * pixelConst + 10 + 100, field->sizeY * pixelConst + 10);
+    gtk_widget_set_size_request(darea, field->size.x * pixelConst + 10 + 100, field->size.y * pixelConst + 10);
     g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), field);
-    g_timeout_add(10, (GSourceFunc) screenUpdate, darea);  //condition required to complete 
+    g_timeout_add(10, (GSourceFunc) screenUpdate, darea);  //condition to stop
+}
+
+gboolean screenUpdate(GtkWidget *darea)
+{
+    gtk_widget_queue_draw(darea);
+    return TRUE;
 }
 
 gboolean on_draw_event(GtkWidget *darea, cairo_t *cairoDrawPlace, field_t *field)
@@ -27,26 +33,32 @@ void do_drawing(cairo_t *cairoDrawPlace, GtkWidget *darea, field_t *field)
     cairo_set_line_width(cairoDrawPlace, 2);
     cairo_set_line_cap(cairoDrawPlace, CAIRO_LINE_CAP_ROUND);
     cairo_translate(cairoDrawPlace, 5, 5);
-    if (field->isGameover) {
-        gameoverDraw(cairoDrawPlace, field);
-    } else {
+    switch (field->gameStatus) {
+    case START_MENU:
         fieldDraw(cairoDrawPlace, field);
+        //startMenuDraw(cairoDrawPlace, field);
+        break;
+    case GAME_IN_PROCESS:
+        fieldDraw(cairoDrawPlace, field);
+        break;
+    case GAMEOVER:
+        gameoverDraw(cairoDrawPlace, field);
+        break;
     }
-    menuDraw(cairoDrawPlace, field);
+    rightMenuDraw(cairoDrawPlace, field);
     cairo_stroke(cairoDrawPlace);
 }
 
-gboolean screenUpdate(GtkWidget *darea)
+void startMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
-    gtk_widget_queue_draw(darea);
-    return TRUE;
+    
 }
 
 void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
     int i, j;
-    for (i = 0; i < field->sizeY; i++) {
-        for (j = 0; j < field->sizeX; j++) {
+    for (i = 0; i < field->size.y; i++) {
+        for (j = 0; j < field->size.x; j++) {
             switch (field->values[i][j]) {
             case SHIP:
                 cairo_set_source_rgba(cairoDrawPlace, 1, 0.85, 0, 1);
@@ -86,7 +98,7 @@ void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
     }
 }
 
-void menuDraw(cairo_t *cairoDrawPlace, field_t *field)
+void rightMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
     /*cairo_surface_t *image;
     image = cairo_image_surface_create_from_png("score.gif");
@@ -97,9 +109,9 @@ void menuDraw(cairo_t *cairoDrawPlace, field_t *field)
     sprintf(score, "%d", field->score);
 
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
-    cairo_move_to(cairoDrawPlace, pixelConst * field->sizeX + 5, 0);
-    cairo_line_to(cairoDrawPlace, pixelConst * field->sizeX + 5, pixelConst * field->sizeY);
-    cairo_translate(cairoDrawPlace, pixelConst * field->sizeX + 10, 5);
+    cairo_move_to(cairoDrawPlace, pixelConst * field->size.x + 5, 0);
+    cairo_line_to(cairoDrawPlace, pixelConst * field->size.x + 5, pixelConst * field->size.y);
+    cairo_translate(cairoDrawPlace, pixelConst * field->size.x + 10, 5);
     cairo_set_font_size(cairoDrawPlace, 16);
     cairo_move_to(cairoDrawPlace, pixelConst, 16);
     cairo_show_text(cairoDrawPlace, "Score:"); 
@@ -111,6 +123,6 @@ void gameoverDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
     cairo_set_font_size(cairoDrawPlace, 16);
-    cairo_move_to(cairoDrawPlace, ((field->sizeX / 2 - 3)) * pixelConst, (field->sizeY / 2) * pixelConst);
+    cairo_move_to(cairoDrawPlace, ((field->size.x / 2 - 3)) * pixelConst, (field->size.y / 2) * pixelConst);
     cairo_show_text(cairoDrawPlace, "GAME OVER");  
 }

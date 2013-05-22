@@ -2,55 +2,197 @@
 
 void shipInit(field_t *field) 
 {
-    field->shipLocation.x = field->sizeX / 2 ;
-    field->shipLocation.y = field->sizeY - 1;
+    field->shipLocation.x = field->size.x / 2;
+    field->shipLocation.y = field->size.y - 1;
     shipMove(field, 0, 0);
 }
 
 void shipMove(field_t *field, int y, int x)
 {
-    field->values[field->shipLocation.y][field->shipLocation.x - 1] = EMPTY;
-    field->values[field->shipLocation.y][field->shipLocation.x + 1] = EMPTY;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x] = EMPTY;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] = EMPTY;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] = EMPTY;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] = EMPTY;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] = EMPTY;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x] = EMPTY;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] = EMPTY;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] = EMPTY;
-    field->values[field->shipLocation.y - 3][field->shipLocation.x] = EMPTY;
-
-
-    field->shipLocation.x += x;
-    ((field->shipLocation.x) >= field->sizeX || (field->shipLocation.x) < 0) ? field->shipLocation.x -= x : x;
-    field->shipLocation.y += y;
-    (field->shipLocation.y >= field->sizeY || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
-
-    if ((field->values[field->shipLocation.y][field->shipLocation.x - 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y][field->shipLocation.x + 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] == BLOCK_LVL1) ||
-        (field->values[field->shipLocation.y - 3][field->shipLocation.x])) {
-        field->isGameover = 1;
+    switch (field->shipType) {
+    case ARCANE: 
+        shipSetArcane(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case WING: 
+        shipSetWing(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case VERTIGO: 
+        shipSetVertigo(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case YOMEN: 
+        shipSetYomen(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case OMEGA: 
+        shipSetOmega(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case HERO: 
+        shipSetHero(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
+    case SKULL: 
+        shipSetSkull(field, field->shipLocation.y, field->shipLocation.x, EMPTY); 
+        break;
     }
-    field->values[field->shipLocation.y][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 2] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 1][field->shipLocation.x + 2] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x - 1] = SHIP;
-    field->values[field->shipLocation.y - 2][field->shipLocation.x + 1] = SHIP;
-    field->values[field->shipLocation.y - 3][field->shipLocation.x] = SHIP;
+    field->shipLocation.x += x;
+    ((field->shipLocation.x) >= field->size.x || (field->shipLocation.x) < 0) ? field->shipLocation.x -= x : x;
+    field->shipLocation.y += y;
+    (field->shipLocation.y >= field->size.y || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
+
+    switch (field->shipType) {
+    case ARCANE: 
+        shipSetArcane(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case WING: 
+        shipSetWing(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case VERTIGO: 
+        shipSetVertigo(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case YOMEN: 
+        shipSetYomen(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case OMEGA: 
+        shipSetOmega(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case HERO: 
+        shipSetHero(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    case SKULL: 
+        shipSetSkull(field, field->shipLocation.y, field->shipLocation.x, SHIP);
+        break;
+    }
+}
+
+void shipSetArcane(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 1] < BLOCK_LVL1) || (field->values[y][x - 1] > BLOCK_LVL3)) ? (field->values[y][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 1] < BLOCK_LVL1) || (field->values[y][x + 1] > BLOCK_LVL3)) ? (field->values[y][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x] < BLOCK_LVL1) || (field->values[y - 1][x] > BLOCK_LVL3)) ? (field->values[y - 1][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 1] < BLOCK_LVL1) || (field->values[y - 2][x - 1] > BLOCK_LVL3)) ? (field->values[y - 2][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 1] < BLOCK_LVL1) || (field->values[y - 2][x + 1] > BLOCK_LVL3)) ? (field->values[y - 2][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 1] < BLOCK_LVL1) || (field->values[y - 3][x - 1] > BLOCK_LVL3)) ? (field->values[y - 3][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 1] < BLOCK_LVL1) || (field->values[y - 3][x + 1] > BLOCK_LVL3)) ? (field->values[y - 3][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x] < BLOCK_LVL1) || (field->values[y - 4][x] > BLOCK_LVL3)) ? (field->values[y - 4][x] = state) : (field->gameStatus = GAMEOVER);
+}
+
+void shipSetWing(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 1] < BLOCK_LVL1) || (field->values[y][x - 1] > BLOCK_LVL3)) ? (field->values[y][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 1] < BLOCK_LVL1) || (field->values[y][x + 1] > BLOCK_LVL3)) ? (field->values[y][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x] < BLOCK_LVL1) || (field->values[y - 1][x] > BLOCK_LVL3)) ? (field->values[y - 1][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 2] < BLOCK_LVL1) || (field->values[y - 2][x - 2] > BLOCK_LVL3)) ? (field->values[y - 2][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 2] < BLOCK_LVL1) || (field->values[y - 2][x + 2] > BLOCK_LVL3)) ? (field->values[y - 2][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x] < BLOCK_LVL1) || (field->values[y - 4][x] > BLOCK_LVL3)) ? (field->values[y - 4][x] = state) : (field->gameStatus = GAMEOVER);
+    
+}
+
+void shipSetVertigo(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 2] < BLOCK_LVL1) || (field->values[y][x - 2] > BLOCK_LVL3)) ? (field->values[y][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 2] < BLOCK_LVL1) || (field->values[y][x + 2] > BLOCK_LVL3)) ? (field->values[y][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 1] < BLOCK_LVL1) || (field->values[y - 2][x - 1] > BLOCK_LVL3)) ? (field->values[y - 2][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 1] < BLOCK_LVL1) || (field->values[y - 2][x + 1] > BLOCK_LVL3)) ? (field->values[y - 2][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x] < BLOCK_LVL1) || (field->values[y - 4][x] > BLOCK_LVL3)) ? (field->values[y - 4][x] = state) : (field->gameStatus = GAMEOVER);
+    
+}
+
+void shipSetYomen(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 2] < BLOCK_LVL1) || (field->values[y][x - 2] > BLOCK_LVL3)) ? (field->values[y][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 2] < BLOCK_LVL1) || (field->values[y][x + 2] > BLOCK_LVL3)) ? (field->values[y][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 1] < BLOCK_LVL1) || (field->values[y - 2][x - 1] > BLOCK_LVL3)) ? (field->values[y - 2][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 1] < BLOCK_LVL1) || (field->values[y - 2][x + 1] > BLOCK_LVL3)) ? (field->values[y - 2][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 2] < BLOCK_LVL1) || (field->values[y - 3][x - 2] > BLOCK_LVL3)) ? (field->values[y - 3][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 2] < BLOCK_LVL1) || (field->values[y - 3][x + 2] > BLOCK_LVL3)) ? (field->values[y - 3][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x] < BLOCK_LVL1) || (field->values[y - 4][x] > BLOCK_LVL3)) ? (field->values[y - 4][x] = state) : (field->gameStatus = GAMEOVER);
+    
+}
+
+void shipSetOmega(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 1] < BLOCK_LVL1) || (field->values[y][x - 1] > BLOCK_LVL3)) ? (field->values[y][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 1] < BLOCK_LVL1) || (field->values[y][x + 1] > BLOCK_LVL3)) ? (field->values[y][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x] < BLOCK_LVL1) || (field->values[y - 1][x] > BLOCK_LVL3)) ? (field->values[y - 1][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 1] < BLOCK_LVL1) || (field->values[y - 2][x - 1] > BLOCK_LVL3)) ? (field->values[y - 2][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 1] < BLOCK_LVL1) || (field->values[y - 2][x + 1] > BLOCK_LVL3)) ? (field->values[y - 2][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 2] < BLOCK_LVL1) || (field->values[y - 3][x - 2] > BLOCK_LVL3)) ? (field->values[y - 3][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 1] < BLOCK_LVL1) || (field->values[y - 3][x - 1] > BLOCK_LVL3)) ? (field->values[y - 3][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 1] < BLOCK_LVL1) || (field->values[y - 3][x + 1] > BLOCK_LVL3)) ? (field->values[y - 3][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 2] < BLOCK_LVL1) || (field->values[y - 3][x + 2] > BLOCK_LVL3)) ? (field->values[y - 3][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x - 1] < BLOCK_LVL1) || (field->values[y - 4][x - 1] > BLOCK_LVL3)) ? (field->values[y - 4][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x + 1] < BLOCK_LVL1) || (field->values[y - 4][x + 1] > BLOCK_LVL3)) ? (field->values[y - 4][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    
+}
+
+void shipSetHero(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 2] < BLOCK_LVL1) || (field->values[y][x - 2] > BLOCK_LVL3)) ? (field->values[y][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 2] < BLOCK_LVL1) || (field->values[y][x + 2] > BLOCK_LVL3)) ? (field->values[y][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 1] < BLOCK_LVL1) || (field->values[y - 2][x - 1] > BLOCK_LVL3)) ? (field->values[y - 2][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 1] < BLOCK_LVL1) || (field->values[y - 2][x + 1] > BLOCK_LVL3)) ? (field->values[y - 2][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 1] < BLOCK_LVL1) || (field->values[y - 3][x - 1] > BLOCK_LVL3)) ? (field->values[y - 3][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 1] < BLOCK_LVL1) || (field->values[y - 3][x + 1] > BLOCK_LVL3)) ? (field->values[y - 3][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x - 1] < BLOCK_LVL1) || (field->values[y - 4][x - 1] > BLOCK_LVL3)) ? (field->values[y - 4][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x + 1] < BLOCK_LVL1) || (field->values[y - 4][x + 1] > BLOCK_LVL3)) ? (field->values[y - 4][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    
+}
+
+void shipSetSkull(field_t *field, int y, int x, int state)
+{
+    state = (state) ? (SHIP) : (EMPTY);
+    ((field->values[y][x - 1] < BLOCK_LVL1) || (field->values[y][x - 1] > BLOCK_LVL3)) ? (field->values[y][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y][x + 1] < BLOCK_LVL1) || (field->values[y][x + 1] > BLOCK_LVL3)) ? (field->values[y][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 2] < BLOCK_LVL1) || (field->values[y - 1][x - 2] > BLOCK_LVL3)) ? (field->values[y - 1][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x - 1] < BLOCK_LVL1) || (field->values[y - 1][x - 1] > BLOCK_LVL3)) ? (field->values[y - 1][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 1] < BLOCK_LVL1) || (field->values[y - 1][x + 1] > BLOCK_LVL3)) ? (field->values[y - 1][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 1][x + 2] < BLOCK_LVL1) || (field->values[y - 1][x + 2] > BLOCK_LVL3)) ? (field->values[y - 1][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x - 2] < BLOCK_LVL1) || (field->values[y - 2][x - 2] > BLOCK_LVL3)) ? (field->values[y - 2][x - 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x] < BLOCK_LVL1) || (field->values[y - 2][x] > BLOCK_LVL3)) ? (field->values[y - 2][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 2][x + 2] < BLOCK_LVL1) || (field->values[y - 2][x + 2] > BLOCK_LVL3)) ? (field->values[y - 2][x + 2] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x - 1] < BLOCK_LVL1) || (field->values[y - 3][x - 1] > BLOCK_LVL3)) ? (field->values[y - 3][x - 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x] < BLOCK_LVL1) || (field->values[y - 3][x] > BLOCK_LVL3)) ? (field->values[y - 3][x] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 3][x + 1] < BLOCK_LVL1) || (field->values[y - 3][x + 1] > BLOCK_LVL3)) ? (field->values[y - 3][x + 1] = state) : (field->gameStatus = GAMEOVER);
+    ((field->values[y - 4][x] < BLOCK_LVL1) || (field->values[y - 4][x] > BLOCK_LVL3)) ? (field->values[y - 4][x] = state) : (field->gameStatus = GAMEOVER);
+    
 }
 
 int bulletMove(field_t *field, int y, int x)

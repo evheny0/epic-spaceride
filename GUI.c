@@ -1,5 +1,6 @@
 #include "GUI.h"
 
+
 void GUIInit(field_t *field) 
 {
     GtkWidget *window;
@@ -28,8 +29,30 @@ void GUIInit(field_t *field)
 
 gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field)
 {
-    gameKeys(event->keyval, field);
+    switch (field->gameStatus) {
+    case START_MENU:
+        startMenuKeys(event->keyval, field);
+        gameKeys(event->keyval, field);
+        break;
+    case GAME_IN_PROCESS:
+        gameKeys(event->keyval, field);
+        break;
+    case GAMEOVER:
+        break;
+    }
     return TRUE;
+}
+
+void startMenuKeys(int keyval, field_t *field)
+{
+    switch (keyval) {
+    case GDK_KEY_Up:
+        //shipMove(field, -1, 0);
+        break;
+    case GDK_KEY_Down:
+        //shipMove(field, 1, 0);
+        break;
+    }
 }
 
 void gameKeys(int keyval, field_t *field)
@@ -49,9 +72,9 @@ void gameKeys(int keyval, field_t *field)
         shipMove(field, 0, 1);
         break;
     case GDK_KEY_z:
-        if (!field->isGameover) {
+        //if (field->gameStatus == GAME_IN_PROCESS) {
             pthread_create(&bulletThread, NULL, bulletStart, (void *) field);
-        }
+        //}
         break;
     }
 }
@@ -61,7 +84,7 @@ void *bulletStart(void *vptr_args)
     field_t *field;
     field = vptr_args;
 
-    int i = field->shipLocation.y - 4, j = field->shipLocation.x;
+    int i = field->shipLocation.y - 5, j = field->shipLocation.x;
     field->values[i][j] = BULLET;
     for (i--; ; i--) {
         usleep(40000);
