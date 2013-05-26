@@ -61,13 +61,13 @@ void startMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
                              "SKULL"};
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
     cairo_set_font_size(cairoDrawPlace, 16);
-    cairo_move_to(cairoDrawPlace, 2 * pixelConst, 2 * pixelConst);
+    cairo_move_to(cairoDrawPlace, 7 * pixelConst, 2 * pixelConst);
     cairo_show_text(cairoDrawPlace, "Choose ship:"); 
     for (i = 0; i <= SKULL; i++) {
         if (field->shipType == i) {
-            cairo_rectangle(cairoDrawPlace, pixelConst, 2 * (i + 2) * pixelConst, pixelConst, -pixelConst);
+            cairo_rectangle(cairoDrawPlace, 6 * pixelConst, 2 * (i + 2) * pixelConst, pixelConst, -pixelConst);
         }
-        cairo_move_to(cairoDrawPlace, 3 * pixelConst, 2 * (i + 2) * pixelConst - 1);
+        cairo_move_to(cairoDrawPlace, 8 * pixelConst, 2 * (i + 2) * pixelConst - 1);
         cairo_show_text(cairoDrawPlace, shipName[i]); 
     }
     cairo_move_to(cairoDrawPlace, pixelConst, 2 * (i + 4) * pixelConst);
@@ -140,6 +140,7 @@ void rightMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
     cairo_set_source_surface(cairoDrawPlace, image, 10, 10);
     cairo_paint(cairoDrawPlace);
     cairo_surface_destroy(image);*/
+
     char score[20];
     sprintf(score, "%d", field->score);
 
@@ -148,10 +149,13 @@ void rightMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
     cairo_line_to(cairoDrawPlace, pixelConst * field->size.x + 5, pixelConst * field->size.y);
     cairo_translate(cairoDrawPlace, pixelConst * field->size.x + 10, 5);
     cairo_set_font_size(cairoDrawPlace, 16);
-    cairo_move_to(cairoDrawPlace, pixelConst, 16);
-    cairo_show_text(cairoDrawPlace, "Score:"); 
-    cairo_move_to(cairoDrawPlace, pixelConst, 32);
-    cairo_show_text(cairoDrawPlace, score); 
+    //cairo_move_to(cairoDrawPlace, pixelConst, 16);
+    setImage(cairoDrawPlace, "image/score.png", 4, 0);
+    //cairo_show_text(cairoDrawPlace, "Score:"); 
+    setImageOfNumber(cairoDrawPlace, field->score, 5, 2, 32);
+    //cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
+    //cairo_move_to(cairoDrawPlace, pixelConst, 64);
+    //cairo_show_text(cairoDrawPlace, score); 
     cairo_stroke(cairoDrawPlace);
 }
 
@@ -161,5 +165,34 @@ void gameoverDraw(cairo_t *cairoDrawPlace, field_t *field)
     cairo_set_font_size(cairoDrawPlace, 16);
     cairo_move_to(cairoDrawPlace, ((field->size.x / 2 - 3)) * pixelConst, (field->size.y / 2) * pixelConst);
     cairo_show_text(cairoDrawPlace, "GAME OVER");  
+    cairo_stroke(cairoDrawPlace);
+}
+
+void setImage(cairo_t *cairoDrawPlace, char *path, int x, int y)
+{
+    cairo_stroke(cairoDrawPlace);
+
+    cairo_surface_t *surface;
+    surface = cairo_image_surface_create_from_png(path);
+    cairo_set_source_surface(cairoDrawPlace, surface, x, y);
+    cairo_rectangle(cairoDrawPlace, x, y, cairo_image_surface_get_width(surface), cairo_image_surface_get_height(surface));
+    cairo_fill(cairoDrawPlace);
+    cairo_stroke(cairoDrawPlace);
+}
+
+void setImageOfNumber(cairo_t *cairoDrawPlace, int number, int numberLength, int x, int y)
+{
+    cairo_stroke(cairoDrawPlace);
+
+    int i, digit;
+    cairo_surface_t *surface;
+    surface = cairo_image_surface_create_from_png("image/numbers.png");
+    for (i = 0; i < numberLength; i++) {
+        digit = (number / (int) pow(10, numberLength - i - 1)) % 10;
+        cairo_set_source_surface(cairoDrawPlace, surface, x + (i * 18) - (15 * digit), y);
+        cairo_rectangle(cairoDrawPlace, x + (i * 18), y, 15, cairo_image_surface_get_height(surface));
+        cairo_fill(cairoDrawPlace);
+        cairo_stroke(cairoDrawPlace);
+    }
     cairo_stroke(cairoDrawPlace);
 }

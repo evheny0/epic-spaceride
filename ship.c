@@ -189,7 +189,8 @@ int bulletMove(field_t *field, int y, int x)
 {
     if (y < 0) {
         field->values[y + 1][x] = EMPTY;
-        field->score += -1;
+
+        field->score += (field->score == 0) ? 0 : -1;
         return -1;
     }
     switch (field->values[y][x]) {

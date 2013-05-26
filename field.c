@@ -23,7 +23,7 @@ field_t *fieldInit()
     return field;
 }
     
-void *generateBlocks(void *vptr_args)
+void *generateBlocks(void *vptr_args)  //move to game engine
 {
     field_t *field;
     field = vptr_args;
