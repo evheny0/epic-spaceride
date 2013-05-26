@@ -149,13 +149,8 @@ void rightMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
     cairo_line_to(cairoDrawPlace, pixelConst * field->size.x + 5, pixelConst * field->size.y);
     cairo_translate(cairoDrawPlace, pixelConst * field->size.x + 10, 5);
     cairo_set_font_size(cairoDrawPlace, 16);
-    //cairo_move_to(cairoDrawPlace, pixelConst, 16);
     setImage(cairoDrawPlace, "image/score.png", 4, 0);
-    //cairo_show_text(cairoDrawPlace, "Score:"); 
     setImageOfNumber(cairoDrawPlace, field->score, 5, 2, 32);
-    //cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
-    //cairo_move_to(cairoDrawPlace, pixelConst, 64);
-    //cairo_show_text(cairoDrawPlace, score); 
     cairo_stroke(cairoDrawPlace);
 }
 
@@ -192,7 +187,6 @@ void setImageOfNumber(cairo_t *cairoDrawPlace, int number, int numberLength, int
         cairo_set_source_surface(cairoDrawPlace, surface, x + (i * 18) - (15 * digit), y);
         cairo_rectangle(cairoDrawPlace, x + (i * 18), y, 15, cairo_image_surface_get_height(surface));
         cairo_fill(cairoDrawPlace);
-        cairo_stroke(cairoDrawPlace);
     }
     cairo_stroke(cairoDrawPlace);
 }
