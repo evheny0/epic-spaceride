@@ -25,6 +25,7 @@ void GUIInit(field_t *field)
 
     gtk_widget_show_all(window);
     gtk_main();
+    freeField(field);
 }
 
 gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field)
@@ -37,6 +38,7 @@ gboolean keyPress(GtkWidget *window, GdkEventKey *event, field_t *field)
         gameKeys(event->keyval, field);
         break;
     case GAMEOVER:
+        gameoverKeys(event->keyval, field);
         break;
     }
     return TRUE;
@@ -89,12 +91,22 @@ void gameKeys(int keyval, field_t *field)
     }
 }
 
+void gameoverKeys(int keyval, field_t *field)
+{
+    if (keyval == GDK_KEY_z) {
+        field->gameStatus = START_MENU;
+    }
+}
+
 void *bulletStart(void *vptr_args)
 {
     field_t *field;
     field = vptr_args;
 
     int i = field->shipLocation.y - 5, j = field->shipLocation.x;
+    if (i < 0) {
+        return NULL;
+    }
     field->values[i][j] = BULLET;
     for (i--; ; i--) {
         usleep(40000);
@@ -107,5 +119,7 @@ void *bulletStart(void *vptr_args)
 
 void closeButton(GtkWidget *window, field_t *field)
 {
+    field->gameStatus = EXIT;
+    graphicsDestroy();
     gtk_main_quit();
 }

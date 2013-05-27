@@ -4,7 +4,7 @@ int main(int argc, char **argv)
 {
     field_t *field;
     field = fieldInit();
-    shipInit(field);
+    engineInit(field);
     GUIInit(field);
     return 0;
 }

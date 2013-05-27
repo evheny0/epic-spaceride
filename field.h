@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <pthread.h>
-#include <unistd.h>
 
 enum field_values {
     EMPTY,
@@ -16,7 +14,8 @@ enum GAME_STATUS {
     START_MENU,
     GAME_IN_PROCESS,
     GAMEOVER,
-    WIN
+    WIN,
+    EXIT
 };
 
 typedef struct coord_t {
@@ -35,4 +34,5 @@ typedef struct field_t {
 
 
 field_t *fieldInit();
-void *generateBlocks(void *vptr_args);
+void clearField(field_t *field);
+void freeField(field_t *field);

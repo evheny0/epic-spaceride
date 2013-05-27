@@ -25,7 +25,7 @@ void shipMove(field_t *field, int y, int x)
     field->shipLocation.x += x;
     (field->shipLocation.x >= field->size.x || field->shipLocation.x < 0) ? field->shipLocation.x -= x : x;
     field->shipLocation.y += y;
-    (field->shipLocation.y >= field->size.y || (field->shipLocation.y - 3) < 0) ? field->shipLocation.y -= y : y;
+    (field->shipLocation.y >= field->size.y || (field->shipLocation.y - 4) < 0) ? field->shipLocation.y -= y : y;
 
     switch (field->shipType) {
     case ARCANE: 

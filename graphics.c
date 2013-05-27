@@ -1,6 +1,7 @@
 #include "graphics.h"
 
 const int pixelConst = 16;  //need move to header
+int isExit = 0;
 
 void graphicsInit(GtkWidget *frame, field_t *field)
 {
@@ -12,8 +13,16 @@ void graphicsInit(GtkWidget *frame, field_t *field)
     g_timeout_add(10, (GSourceFunc) screenUpdate, darea);  //condition to stop
 }
 
+void graphicsDestroy()
+{
+    isExit = 1;
+}
+
 gboolean screenUpdate(GtkWidget *darea)
 {
+    if (isExit) {
+        return FALSE;
+    }
     gtk_widget_queue_draw(darea);
     return TRUE;
 }
@@ -121,7 +130,6 @@ void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
                 break;
             case BULLET:
                 cairo_set_source_rgba(cairoDrawPlace, 0, 0, 0, 1);
-                //cairo_rectangle(cairoDrawPlace, j * pixelConst, i * pixelConst, pixelConst, pixelConst);
                 cairo_arc(cairoDrawPlace, j * pixelConst + (pixelConst / 2), 
                                           i * pixelConst + (pixelConst / 2), 
                                           pixelConst / 4, 0, 2 * 3.14);
@@ -135,15 +143,6 @@ void fieldDraw(cairo_t *cairoDrawPlace, field_t *field)
 
 void rightMenuDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
-    /*cairo_surface_t *image;
-    image = cairo_image_surface_create_from_png("score.gif");
-    cairo_set_source_surface(cairoDrawPlace, image, 10, 10);
-    cairo_paint(cairoDrawPlace);
-    cairo_surface_destroy(image);*/
-
-    char score[20];
-    sprintf(score, "%d", field->score);
-
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
     cairo_move_to(cairoDrawPlace, pixelConst * field->size.x + 5, 0);
     cairo_line_to(cairoDrawPlace, pixelConst * field->size.x + 5, pixelConst * field->size.y);
@@ -158,8 +157,10 @@ void gameoverDraw(cairo_t *cairoDrawPlace, field_t *field)
 {
     cairo_set_source_rgba(cairoDrawPlace, 1, 1, 1, 1);
     cairo_set_font_size(cairoDrawPlace, 16);
-    cairo_move_to(cairoDrawPlace, ((field->size.x / 2 - 3)) * pixelConst, (field->size.y / 2) * pixelConst);
+    cairo_move_to(cairoDrawPlace, ((field->size.x / 2) - 3) * pixelConst, (field->size.y / 2) * pixelConst);
     cairo_show_text(cairoDrawPlace, "GAME OVER");  
+    cairo_move_to(cairoDrawPlace, ((field->size.x / 2) - 3) * pixelConst + 3, (field->size.y / 2 + 3) * pixelConst);
+    cairo_show_text(cairoDrawPlace, "Z to restart.");  
     cairo_stroke(cairoDrawPlace);
 }
 
@@ -173,6 +174,7 @@ void setImage(cairo_t *cairoDrawPlace, char *path, int x, int y)
     cairo_rectangle(cairoDrawPlace, x, y, cairo_image_surface_get_width(surface), cairo_image_surface_get_height(surface));
     cairo_fill(cairoDrawPlace);
     cairo_stroke(cairoDrawPlace);
+    cairo_surface_destroy(surface);
 }
 
 void setImageOfNumber(cairo_t *cairoDrawPlace, int number, int numberLength, int x, int y)
@@ -185,8 +187,9 @@ void setImageOfNumber(cairo_t *cairoDrawPlace, int number, int numberLength, int
     for (i = 0; i < numberLength; i++) {
         digit = (number / (int) pow(10, numberLength - i - 1)) % 10;
         cairo_set_source_surface(cairoDrawPlace, surface, x + (i * 18) - (15 * digit), y);
-        cairo_rectangle(cairoDrawPlace, x + (i * 18), y, 15, cairo_image_surface_get_height(surface));
+        cairo_rectangle(cairoDrawPlace, x + (i * 18), y, cairo_image_surface_get_width(surface) / 10, cairo_image_surface_get_height(surface));
         cairo_fill(cairoDrawPlace);
     }
     cairo_stroke(cairoDrawPlace);
+    cairo_surface_destroy(surface);
 }
